@@ -11,7 +11,6 @@
       --glass: rgba(255,255,255,.55);
       --glass2: rgba(255,255,255,.35);
       --stroke: rgba(20,20,30,.08);
-      --shadow: 0 30px 80px rgba(10, 12, 20, .12);
       --shadow2: 0 12px 30px rgba(10, 12, 20, .10);
       --text:#0b1020;
       --muted: rgba(11,16,32,.60);
@@ -40,76 +39,33 @@
       overflow-x:hidden;
     }
 
-    .wrap{
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 28px 18px 48px;
-    }
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 18px 48px;}
+    header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:18px;}
+    .title{display:flex;flex-direction:column;gap:6px;}
+    h1{margin:0;font-size:clamp(20px,2.6vw,30px);letter-spacing:-0.02em;line-height:1.15;}
+    .sub{margin:0;color:var(--muted);font-size:13px;}
 
-    header{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:16px;
-      margin-bottom: 18px;
-    }
-
-    .title{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-    h1{
-      margin:0;
-      font-size: clamp(20px, 2.6vw, 30px);
-      letter-spacing: -0.02em;
-      line-height:1.15;
-    }
-    .sub{
-      margin:0;
-      color:var(--muted);
-      font-size: 13px;
-    }
-
-    /* Liquid glass card */
     .glass{
-      position:relative;
-      border-radius: 22px;
-      padding: 18px;
+      position:relative;border-radius:22px;padding:18px;
       background: linear-gradient(135deg, var(--glass), var(--glass2));
-      border: 1px solid var(--stroke);
-      box-shadow: var(--shadow2);
+      border:1px solid var(--stroke);
+      box-shadow:var(--shadow2);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       overflow:hidden;
     }
     .glass::before{
-      content:"";
-      position:absolute;
-      inset:-2px;
+      content:"";position:absolute;inset:-2px;
       background:
         radial-gradient(600px 180px at 20% 10%, rgba(255,255,255,.65), transparent 60%),
         radial-gradient(500px 240px at 80% 30%, rgba(255,255,255,.45), transparent 60%),
         radial-gradient(420px 220px at 40% 110%, rgba(255,255,255,.30), transparent 60%);
-      pointer-events:none;
-      mix-blend-mode: overlay;
-      opacity:.75;
+      pointer-events:none;mix-blend-mode: overlay;opacity:.75;
     }
 
-    .controls{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:flex-end;
-      flex-wrap:wrap;
-    }
-
+    .controls{display:flex;gap:12px;align-items:center;justify-content:flex-end;flex-wrap:wrap;}
     .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding:10px 12px;
-      border-radius: 999px;
+      display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;
       background: rgba(255,255,255,.55);
       border: 1px solid var(--stroke);
       box-shadow: 0 10px 25px rgba(10,12,20,.08);
@@ -118,272 +74,183 @@
       font-size: 13px;
       color: var(--muted);
     }
-    .chip strong{color:var(--text); font-weight:650}
+    .chip strong{color:var(--text);font-weight:650}
 
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
-      margin-top: 14px;
-    }
-
-    .card{
-      grid-column: span 6;
-      min-height: 300px;
-    }
-
-    @media (max-width: 860px){
-      .card{grid-column: span 12;}
-      header{align-items:flex-start; flex-direction:column;}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;margin-top:14px;}
+    .card{grid-column:span 6;min-height:300px;}
+    @media (max-width:860px){
+      .card{grid-column:span 12;}
+      header{align-items:flex-start;flex-direction:column;}
       .controls{justify-content:flex-start;}
     }
 
-    .cardTop{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom: 10px;
-      position:relative;
-      z-index:1;
-    }
-    .cardTop h2{
-      margin:0;
-      font-size: 16px;
-      letter-spacing: -0.01em;
-    }
-    .pill{
-      font-size: 12px;
-      color: var(--muted);
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.55);
-      border: 1px solid var(--stroke);
+    .cardTop{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px;position:relative;z-index:1;}
+    .cardTop h2{margin:0;font-size:16px;letter-spacing:-0.01em;}
+    .pill{font-size:12px;color:var(--muted);padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.55);border:1px solid var(--stroke);}
+
+    .donutWrap{display:grid;grid-template-columns:320px 1fr;gap:16px;align-items:center;position:relative;z-index:1;}
+    @media (max-width:600px){
+      .donutWrap{grid-template-columns:1fr;justify-items:center;}
     }
 
-    /* Donut */
-    .donutWrap{
-      display:grid;
-      grid-template-columns: 320px 1fr;
-      gap: 16px;
-      align-items:center;
-      position:relative;
-      z-index:1;
-    }
-    @media (max-width: 600px){
-      .donutWrap{grid-template-columns: 1fr; justify-items:center;}
-    }
-
-    .donut{
-      width: 320px;
-      height: 320px;
-      position:relative;
-      display:grid;
-      place-items:center;
-    }
+    .donut{width:320px;height:320px;position:relative;display:grid;place-items:center;}
     .donut svg{
-      width: 100%;
-      height: 100%;
-      transform: rotate(-90deg); /* start at top */
+      width:100%;height:100%;
+      transform: rotate(-90deg);
       filter: drop-shadow(0 18px 30px rgba(10,12,20,.12));
     }
 
     .center{
-      position:absolute;
-      inset: 52px;
-      border-radius: 999px;
+      position:absolute;inset:52px;border-radius:999px;
       background: rgba(255,255,255,.62);
       border: 1px solid var(--stroke);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.55), 0 10px 30px rgba(10,12,20,.10);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      justify-content:center;
-      text-align:center;
-      padding: 16px;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:16px;
     }
-    .center .big{
-      font-size: 34px;
-      font-weight: 750;
-      letter-spacing:-0.03em;
-      line-height:1.05;
-      margin-bottom: 8px;
-    }
-    .center .small{
-      color:var(--muted);
-      font-size: 13px;
-      line-height:1.3;
-    }
+    .center .big{font-size:34px;font-weight:750;letter-spacing:-0.03em;line-height:1.05;margin-bottom:8px;}
+    .center .small{color:var(--muted);font-size:13px;line-height:1.3;}
 
-    /* Legend */
-    .legend{
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-      padding-right: 6px;
-    }
+    .legend{display:flex;flex-direction:column;gap:10px;padding-right:6px;}
     .row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding: 10px 12px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.50);
-      border: 1px solid var(--stroke);
+      display:flex;align-items:center;justify-content:space-between;gap:12px;
+      padding:10px 12px;border-radius:16px;background:rgba(255,255,255,.50);
+      border:1px solid var(--stroke);
     }
-    .left{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width: 0;
-    }
-    .dot{
-      width: 10px; height: 10px;
-      border-radius:999px;
-      box-shadow: 0 6px 16px rgba(10,12,20,.15);
-      flex: 0 0 auto;
-    }
-    .name{
-      font-size: 13px;
-      color: var(--text);
-      font-weight: 650;
-      white-space: nowrap;
-      overflow:hidden;
-      text-overflow: ellipsis;
-    }
-    .val{
-      font-variant-numeric: tabular-nums;
-      font-size: 13px;
-      color: var(--muted);
-      white-space: nowrap;
-    }
+    .left{display:flex;align-items:center;gap:10px;min-width:0;}
+    .dot{width:10px;height:10px;border-radius:999px;box-shadow:0 6px 16px rgba(10,12,20,.15);flex:0 0 auto;}
+    .name{font-size:13px;color:var(--text);font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .val{font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted);white-space:nowrap;}
 
-    /* Range slider (glass) */
-    .sliderBox{
-      grid-column: span 12;
-      padding: 16px 18px;
-    }
-    .rangeLine{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 14px;
-      margin-bottom: 10px;
-      position:relative;
-      z-index:1;
-    }
-    .rangeLine .label{
-      font-size: 13px;
-      color: var(--muted);
-    }
+    .sliderBox{grid-column:span 12;padding:16px 18px;}
+    .rangeLine{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:10px;position:relative;z-index:1;}
+    .rangeLine .label{font-size:13px;color:var(--muted);}
     .rangeLine .label strong{color:var(--text)}
     input[type="range"]{
-      width:100%;
-      -webkit-appearance:none;
-      appearance:none;
-      height: 12px;
-      border-radius: 999px;
+      width:100%;-webkit-appearance:none;appearance:none;height:12px;border-radius:999px;
       background: rgba(255,255,255,.55);
       border: 1px solid var(--stroke);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.55);
-      outline:none;
-      position:relative;
-      z-index:1;
+      outline:none;position:relative;z-index:1;
     }
     input[type="range"]::-webkit-slider-thumb{
-      -webkit-appearance:none;
-      appearance:none;
-      width: 26px;
-      height: 26px;
-      border-radius: 999px;
+      -webkit-appearance:none;appearance:none;width:26px;height:26px;border-radius:999px;
       background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.55));
       border: 1px solid var(--stroke);
       box-shadow: 0 16px 30px rgba(10,12,20,.16);
       cursor:pointer;
     }
     input[type="range"]::-moz-range-thumb{
-      width: 26px; height: 26px; border-radius:999px;
+      width:26px;height:26px;border-radius:999px;
       background: linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.55));
       border: 1px solid var(--stroke);
       box-shadow: 0 16px 30px rgba(10,12,20,.16);
       cursor:pointer;
     }
+
+    /* Loading overlay */
+    .overlay{
+      position:fixed;inset:0;display:none;place-items:center;
+      background: rgba(255,255,255,.55);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index:9999;
+    }
+    .overlay.show{display:grid;}
+    .loader{
+      width:min(520px, calc(100vw - 32px));
+      border-radius: 22px;
+      padding: 18px 18px 16px;
+      background: linear-gradient(135deg, rgba(255,255,255,.75), rgba(255,255,255,.45));
+      border: 1px solid rgba(20,20,30,.10);
+      box-shadow: 0 30px 90px rgba(10,12,20,.14);
+      text-align:left;
+    }
+    .loader h3{margin:0 0 6px 0;font-size:15px;letter-spacing:-0.01em;}
+    .loader p{margin:0;color:var(--muted);font-size:13px;line-height:1.35;}
+    .bar{
+      margin-top:12px;height:10px;border-radius:999px;
+      background: rgba(14,20,40,.08);
+      border: 1px solid rgba(20,20,30,.08);
+      overflow:hidden;
+    }
+    .bar > div{height:100%;width:0%;background: rgba(47,107,255,.55);border-radius:999px;transition:width .25s ease;}
   </style>
 </head>
 
 <body>
+  <div class="overlay" id="overlay">
+    <div class="loader">
+      <h3 id="loadTitle">Loading Congress data…</h3>
+      <p id="loadSub">First load may take a moment (historical dataset is large).</p>
+      <div class="bar"><div id="loadBar"></div></div>
+    </div>
+  </div>
+
   <div class="wrap">
     <header>
       <div class="title">
         <h1>Congress Seats</h1>
-        <p class="sub">Liquid glass donut charts — split by party share</p>
+        <p class="sub">Liquid glass donut charts — computed from a public historical dataset</p>
       </div>
-
       <div class="controls">
-        <div class="chip">Mode: <strong>Monthly</strong></div>
-        <div class="chip">Theme: <strong>White Glass</strong></div>
+        <div class="chip">Source: <strong>unitedstates/congress-legislators</strong></div>
+        <div class="chip">Range: <strong>1900 → now</strong></div>
       </div>
     </header>
 
     <div class="grid">
-      <!-- Slider (month-by-month index) -->
       <section class="glass sliderBox">
         <div class="rangeLine">
-          <div class="label">Snapshot: <strong id="snapshotLabel">Example Month</strong></div>
-          <div class="label"><span id="monthIndexLabel">#0</span></div>
+          <div class="label">Snapshot: <strong id="snapshotLabel">—</strong></div>
+          <div class="label"><span id="monthIndexLabel">—</span></div>
         </div>
-        <input id="monthSlider" type="range" min="0" max="0" step="1" value="0" />
+        <input id="monthSlider" type="range" min="0" max="0" step="1" value="0" disabled />
       </section>
 
-      <!-- House -->
-      <section class="glass card" id="houseCard">
+      <section class="glass card">
         <div class="cardTop">
           <h2>House</h2>
-          <div class="pill"><span id="houseTotal">435</span> seats</div>
+          <div class="pill"><span id="houseTotal">—</span> seats</div>
         </div>
-
         <div class="donutWrap">
           <div class="donut">
             <svg viewBox="0 0 120 120" aria-label="House donut" role="img">
-              <!-- background ring -->
+              <!-- Base ring -->
               <circle cx="60" cy="60" r="46" fill="none" stroke="var(--ring-bg)" stroke-width="12" />
-              <!-- segments injected here -->
+              <!-- Segments -->
               <g id="houseSegments"></g>
+              <!-- Inner white highlight ring (the “white inner line”) -->
+              <circle cx="60" cy="60" r="40.3" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="2.2" />
             </svg>
-
             <div class="center">
               <div class="big" id="houseCenterMain">—</div>
               <div class="small" id="houseCenterSub">—</div>
             </div>
           </div>
-
           <div class="legend" id="houseLegend"></div>
         </div>
       </section>
 
-      <!-- Senate -->
-      <section class="glass card" id="senateCard">
+      <section class="glass card">
         <div class="cardTop">
           <h2>Senate</h2>
-          <div class="pill"><span id="senateTotal">100</span> seats</div>
+          <div class="pill"><span id="senateTotal">—</span> seats</div>
         </div>
-
         <div class="donutWrap">
           <div class="donut">
             <svg viewBox="0 0 120 120" aria-label="Senate donut" role="img">
               <circle cx="60" cy="60" r="46" fill="none" stroke="var(--ring-bg)" stroke-width="12" />
               <g id="senateSegments"></g>
+              <!-- Inner white highlight ring -->
+              <circle cx="60" cy="60" r="40.3" fill="none" stroke="rgba(255,255,255,.75)" stroke-width="2.2" />
             </svg>
-
             <div class="center">
               <div class="big" id="senateCenterMain">—</div>
               <div class="small" id="senateCenterSub">—</div>
             </div>
           </div>
-
           <div class="legend" id="senateLegend"></div>
         </div>
       </section>
@@ -391,94 +258,174 @@
   </div>
 
   <script>
-    // ---------- Demo monthly snapshots ----------
-    // Replace this with your real month-by-month dataset (1900 -> now).
-    // Each snapshot: { label, house: {total, parties:[{name,color, seats}]}, senate:{...} }
-    const SNAPSHOTS = [
-      {
-        label: "Example: Nov 2024",
-        house: { total: 435, parties: [
-          { name: "Democrats",  color: "var(--blue)",   seats: 187 },
-          { name: "Republicans",color: "var(--red)",    seats: 245 },
-          { name: "Other",      color: "var(--yellow)", seats: 3   },
-        ]},
-        senate: { total: 100, parties: [
-          { name: "Democrats",  color: "var(--blue)",   seats: 51 },
-          { name: "Republicans",color: "var(--red)",    seats: 49 },
-        ]}
-      },
-      {
-        label: "Example: Jan 2025",
-        house: { total: 435, parties: [
-          { name: "Democrats",  color: "var(--blue)",   seats: 190 },
-          { name: "Republicans",color: "var(--red)",    seats: 242 },
-          { name: "Other",      color: "var(--yellow)", seats: 3   },
-        ]},
-        senate: { total: 100, parties: [
-          { name: "Democrats",  color: "var(--blue)",   seats: 50 },
-          { name: "Republicans",color: "var(--red)",    seats: 50 },
-        ]}
-      },
-    ];
+    // Data source (public, no key):
+    // https://github.com/unitedstates/congress-legislators :contentReference[oaicite:1]{index=1}
+    const URL_HIST = "https://raw.githubusercontent.com/unitedstates/congress-legislators/main/legislators-historical.json";
+    const URL_CURR = "https://raw.githubusercontent.com/unitedstates/congress-legislators/main/legislators-current.json";
 
-    // ---------- Donut rendering (SVG stroke-dasharray) ----------
-    // We draw each segment as a circle with stroke-dasharray and stroke-dashoffset.
-    // This supports clean, glassy arcs without heavy canvas code.
+    // ---- Party -> (label, color). You can tune these however you want. ----
+    const PARTY_THEME = [
+      { match: /Democrat/i,             label: "Democrats",  color: "var(--blue)" },
+      { match: /Republican/i,           label: "Republicans",color: "var(--red)" },
+      { match: /Independent/i,          label: "Independent",color: "var(--yellow)" },
+      { match: /Libertarian/i,          label: "Libertarian",color: "var(--purple)" },
+      { match: /Green/i,                label: "Green",      color: "var(--green)" },
+      { match: /Whig/i,                 label: "Whig",       color: "var(--gray)" },
+      { match: /Federalist/i,           label: "Federalist", color: "var(--gray)" },
+      { match: /Democratic-Republican/i,label: "Dem-Rep",    color: "var(--gray)" },
+    ];
+    function normalizeParty(raw){
+      const p = (raw || "Other").trim();
+      for (const rule of PARTY_THEME){
+        if (rule.match.test(p)) return { key: rule.label, color: rule.color };
+      }
+      return { key: p === "" ? "Other" : p, color: "var(--yellow)" };
+    }
+
+    // ---- UI helpers ----
+    const $ = (id) => document.getElementById(id);
+    function showOverlay(title, sub, pct){
+      $("loadTitle").textContent = title || "Loading…";
+      $("loadSub").textContent = sub || "";
+      $("loadBar").style.width = `${Math.max(0, Math.min(100, pct ?? 0))}%`;
+      $("overlay").classList.add("show");
+    }
+    function hideOverlay(){
+      $("overlay").classList.remove("show");
+    }
+
+    // ---- Build monthly timeline: Jan 1900 -> current month ----
+    function buildMonths(){
+      const start = new Date(Date.UTC(1900, 0, 1));
+      const now = new Date();
+      const end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+      const months = [];
+      let d = new Date(start);
+      while (d <= end){
+        months.push(new Date(d));
+        d = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 1));
+      }
+      return months;
+    }
+    const MONTHS = buildMonths();
+
+    function formatMonth(d){
+      // "Jan 1900"
+      return d.toLocaleString(undefined, { month:"short", year:"numeric", timeZone:"UTC" });
+    }
+
+    // ---- Fetch + parse dataset ----
+    let LEGISLATORS = null; // array of people
+    async function fetchJson(url){
+      const res = await fetch(url, { cache: "force-cache" });
+      if (!res.ok) throw new Error(`Fetch failed: ${url} (${res.status})`);
+      return await res.json();
+    }
+
+    async function loadLegislators(){
+      showOverlay("Loading Congress data…", "Fetching historical + current members…", 10);
+
+      // You can optionally cache in localStorage; but file is huge, so many browsers will reject.
+      // So we keep it simple: fetch + keep in memory.
+      const [hist, curr] = await Promise.all([
+        fetchJson(URL_HIST),
+        fetchJson(URL_CURR),
+      ]);
+
+      showOverlay("Loading Congress data…", "Merging datasets…", 65);
+      // Merge arrays (there is no overlap between historical/current ids in practice, but merging is fine).
+      LEGISLATORS = hist.concat(curr);
+
+      showOverlay("Loading Congress data…", "Ready.", 100);
+      setTimeout(hideOverlay, 150);
+    }
+
+    // ---- Composition computation at a month snapshot ----
+    // We treat a term as active if: start <= date < end
+    function inTerm(dateISO, startISO, endISO){
+      // ISO strings like "1901-03-04"
+      // Compare lexicographically works for YYYY-MM-DD.
+      return startISO <= dateISO && dateISO < endISO;
+    }
+
+    function computeChamberComposition(dateObjUTC, chamberType /* "rep"|"sen" */){
+      const dateISO = dateObjUTC.toISOString().slice(0,10); // UTC YYYY-MM-DD
+      const counts = new Map(); // partyKey -> {seats,color}
+      let total = 0;
+
+      for (const person of LEGISLATORS){
+        const terms = person?.terms;
+        if (!Array.isArray(terms)) continue;
+
+        // Find the active term for this chamber at this date (if any).
+        // People can have multiple terms; pick the one that matches.
+        let active = null;
+        for (const t of terms){
+          if (t.type !== chamberType) continue;
+          if (!t.start || !t.end) continue;
+          if (inTerm(dateISO, t.start, t.end)) { active = t; break; }
+        }
+        if (!active) continue;
+
+        total++;
+        const norm = normalizeParty(active.party);
+        const prev = counts.get(norm.key) || { seats: 0, color: norm.color };
+        prev.seats += 1;
+        // keep first color we see for that normalized key
+        if (!prev.color) prev.color = norm.color;
+        counts.set(norm.key, prev);
+      }
+
+      // Turn into array, sorted by seats desc
+      const parties = Array.from(counts.entries())
+        .map(([name, v]) => ({ name, seats: v.seats, color: v.color }))
+        .sort((a,b)=>b.seats-a.seats);
+
+      return { total, parties };
+    }
+
+    // ---- Donut rendering (segments as SVG circles) ----
     function renderDonut({ segmentsEl, legendEl, centerMainEl, centerSubEl, data }) {
       segmentsEl.innerHTML = "";
       legendEl.innerHTML = "";
 
-      const total = data.total;
-      const parties = data.parties
-        .filter(p => p.seats > 0)
-        .map(p => ({ ...p, pct: (p.seats / total) * 100 }));
+      const total = data.total || 0;
+      const parties = (data.parties || []).filter(p => p.seats > 0);
 
-      // Center text: show largest party + breakdown line
       const sorted = [...parties].sort((a,b)=>b.seats-a.seats);
       const top = sorted[0];
-      const topPct = top ? top.pct : 0;
+      const topPct = top && total ? (top.seats / total) * 100 : 0;
 
       centerMainEl.textContent = top ? `${Math.round(topPct)}%` : "—";
       centerSubEl.textContent = top ? `${top.name} • ${top.seats}/${total}` : "—";
 
-      // SVG circle constants
       const r = 46;
       const C = 2 * Math.PI * r;
 
-      // Starting offset at 0 (svg group already rotated -90deg in CSS)
       let used = 0;
-
-      // Small gap between segments for readability (in "length" along circumference)
-      const gap = 2.2; // tweak for your taste
+      const gap = 2.2; // tweak
       const gapTotal = gap * parties.length;
       const usable = Math.max(C - gapTotal, 0);
 
-      parties.forEach((p, idx) => {
-        const segLen = (p.seats / total) * usable;
+      for (const p of parties){
+        const segLen = total ? (p.seats / total) * usable : 0;
 
-        // Circle segment
         const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        circle.setAttribute("cx", "60");
-        circle.setAttribute("cy", "60");
+        circle.setAttribute("cx","60");
+        circle.setAttribute("cy","60");
         circle.setAttribute("r", String(r));
-        circle.setAttribute("fill", "none");
+        circle.setAttribute("fill","none");
         circle.setAttribute("stroke", p.color);
-        circle.setAttribute("stroke-width", "12");
-        circle.setAttribute("stroke-linecap", "round");
-
-        // dasharray: visible segLen then rest
+        circle.setAttribute("stroke-width","12");
+        circle.setAttribute("stroke-linecap","round");
         circle.setAttribute("stroke-dasharray", `${segLen} ${C - segLen}`);
-        // dashoffset: move segment to correct place
         circle.setAttribute("stroke-dashoffset", String(-(used)));
-
-        // subtle glass highlight on each arc (optional)
         circle.style.opacity = "0.98";
-
         segmentsEl.appendChild(circle);
 
         used += segLen + gap;
 
-        // Legend row
+        const pct = total ? (p.seats / total) * 100 : 0;
         const row = document.createElement("div");
         row.className = "row";
         row.innerHTML = `
@@ -486,47 +433,66 @@
             <span class="dot" style="background:${p.color}"></span>
             <span class="name">${p.name}</span>
           </div>
-          <div class="val">${p.seats} • ${p.pct.toFixed(1)}%</div>
+          <div class="val">${p.seats} • ${pct.toFixed(1)}%</div>
         `;
         legendEl.appendChild(row);
-      });
+      }
     }
 
+    // ---- Main update ----
     function setSnapshot(index){
-      const snap = SNAPSHOTS[index];
+      const d = MONTHS[index];
+      $("snapshotLabel").textContent = formatMonth(d);
+      $("monthIndexLabel").textContent = `#${index}`;
 
-      document.getElementById("snapshotLabel").textContent = snap.label;
-      document.getElementById("monthIndexLabel").textContent = `#${index}`;
+      const house = computeChamberComposition(d, "rep");
+      const senate = computeChamberComposition(d, "sen");
 
-      // House
-      document.getElementById("houseTotal").textContent = snap.house.total;
+      $("houseTotal").textContent = house.total;
+      $("senateTotal").textContent = senate.total;
+
       renderDonut({
-        segmentsEl: document.getElementById("houseSegments"),
-        legendEl: document.getElementById("houseLegend"),
-        centerMainEl: document.getElementById("houseCenterMain"),
-        centerSubEl: document.getElementById("houseCenterSub"),
-        data: snap.house
+        segmentsEl: $("houseSegments"),
+        legendEl: $("houseLegend"),
+        centerMainEl: $("houseCenterMain"),
+        centerSubEl: $("houseCenterSub"),
+        data: house
       });
 
-      // Senate
-      document.getElementById("senateTotal").textContent = snap.senate.total;
       renderDonut({
-        segmentsEl: document.getElementById("senateSegments"),
-        legendEl: document.getElementById("senateLegend"),
-        centerMainEl: document.getElementById("senateCenterMain"),
-        centerSubEl: document.getElementById("senateCenterSub"),
-        data: snap.senate
+        segmentsEl: $("senateSegments"),
+        legendEl: $("senateLegend"),
+        centerMainEl: $("senateCenterMain"),
+        centerSubEl: $("senateCenterSub"),
+        data: senate
       });
     }
 
-    // Slider setup
-    const slider = document.getElementById("monthSlider");
-    slider.max = String(SNAPSHOTS.length - 1);
-    slider.value = "0";
-    slider.addEventListener("input", () => setSnapshot(Number(slider.value)));
+    // ---- Init ----
+    (async function init(){
+      const slider = $("monthSlider");
+      slider.min = "0";
+      slider.max = String(MONTHS.length - 1);
+      slider.step = "1";
+      slider.value = String(MONTHS.length - 1);
+      slider.disabled = true;
 
-    // Init
-    setSnapshot(0);
+      showOverlay("Loading Congress data…", "Fetching public dataset from GitHub…", 5);
+
+      try{
+        await loadLegislators();
+      }catch(err){
+        console.error(err);
+        showOverlay("Couldn’t load data", "Check your network or GitHub availability, then refresh.", 0);
+        return;
+      }
+
+      slider.disabled = false;
+      slider.addEventListener("input", () => setSnapshot(Number(slider.value)));
+
+      // start at latest month
+      setSnapshot(Number(slider.value));
+    })();
   </script>
 </body>
 </html>
