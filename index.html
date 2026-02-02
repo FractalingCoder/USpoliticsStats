@@ -314,8 +314,36 @@
       return d.toLocaleString(undefined, { month:"short", year:"numeric", timeZone:"UTC" });
     }
 
+    function updateMonthLabels(index){
+      const d = MONTHS[index];
+      $("snapshotLabel").textContent = formatMonth(d);
+      $("monthIndexLabel").textContent = `Month ${index + 1} of ${MONTHS.length}`;
+    }
+
     // ---- Fetch + parse dataset ----
-    let LEGISLATORS = null; // array of people
+    let CHAMBER_SERIES = null; // { rep: PartySeries[], sen: PartySeries[] }
+    const START_YEAR = 1900;
+    const END_MONTH_INDEX = MONTHS.length;
+    const CHAMBERS = new Set(["rep", "sen"]);
+
+    function parseIsoParts(iso){
+      if (!iso) return null;
+      const [year, month, day] = iso.split("-").map(Number);
+      if (!year || !month || !day) return null;
+      return { year, month, day };
+    }
+
+    function monthIndexFromISO(iso){
+      const parts = parseIsoParts(iso);
+      if (!parts) return null;
+      const base = (parts.year - START_YEAR) * 12 + (parts.month - 1);
+      const shift = parts.day > 1 ? 1 : 0;
+      return base + shift;
+    }
+
+    function clampMonthIndex(index){
+      return Math.max(0, Math.min(END_MONTH_INDEX, index));
+    }
     async function fetchJson(url){
       const res = await fetch(url, { cache: "force-cache" });
       if (!res.ok) throw new Error(`Fetch failed: ${url} (${res.status})`);
@@ -334,53 +362,88 @@
 
       showOverlay("Loading Congress data…", "Merging datasets…", 65);
       // Merge arrays (there is no overlap between historical/current ids in practice, but merging is fine).
-      LEGISLATORS = hist.concat(curr);
+      const legislators = hist.concat(curr);
+
+      showOverlay("Loading Congress data…", "Indexing monthly snapshots…", 80);
+      CHAMBER_SERIES = buildMonthlySeries(legislators);
 
       showOverlay("Loading Congress data…", "Ready.", 100);
       setTimeout(hideOverlay, 150);
     }
 
-    // ---- Composition computation at a month snapshot ----
-    // We treat a term as active if: start <= date < end
-    function inTerm(dateISO, startISO, endISO){
-      // ISO strings like "1901-03-04"
-      // Compare lexicographically works for YYYY-MM-DD.
-      return startISO <= dateISO && dateISO < endISO;
-    }
+    // ---- Build monthly series ----
+    function buildMonthlySeries(legislators){
+      const series = {
+        rep: new Map(),
+        sen: new Map(),
+      };
 
-    function computeChamberComposition(dateObjUTC, chamberType /* "rep"|"sen" */){
-      const dateISO = dateObjUTC.toISOString().slice(0,10); // UTC YYYY-MM-DD
-      const counts = new Map(); // partyKey -> {seats,color}
-      let total = 0;
-
-      for (const person of LEGISLATORS){
+      for (const person of legislators){
         const terms = person?.terms;
         if (!Array.isArray(terms)) continue;
 
-        // Find the active term for this chamber at this date (if any).
-        // People can have multiple terms; pick the one that matches.
-        let active = null;
-        for (const t of terms){
-          if (t.type !== chamberType) continue;
-          if (!t.start || !t.end) continue;
-          if (inTerm(dateISO, t.start, t.end)) { active = t; break; }
-        }
-        if (!active) continue;
+        for (const term of terms){
+          if (!CHAMBERS.has(term.type)) continue;
+          if (!term.start) continue;
 
-        total++;
-        const norm = normalizeParty(active.party);
-        const prev = counts.get(norm.key) || { seats: 0, color: norm.color };
-        prev.seats += 1;
-        // keep first color we see for that normalized key
-        if (!prev.color) prev.color = norm.color;
-        counts.set(norm.key, prev);
+          const startIndexRaw = monthIndexFromISO(term.start);
+          if (startIndexRaw === null) continue;
+
+          const endIndexRaw = term.end ? monthIndexFromISO(term.end) : END_MONTH_INDEX;
+          if (endIndexRaw === null) continue;
+
+          const startIndex = clampMonthIndex(startIndexRaw);
+          const endIndex = clampMonthIndex(endIndexRaw);
+
+          if (endIndex <= startIndex) continue;
+
+          const { key, color } = normalizeParty(term.party);
+          const chamberMap = series[term.type];
+          if (!chamberMap) continue;
+
+          let entry = chamberMap.get(key);
+          if (!entry){
+            entry = { color, diff: new Array(END_MONTH_INDEX + 1).fill(0) };
+            chamberMap.set(key, entry);
+          }
+          entry.diff[startIndex] += 1;
+          entry.diff[endIndex] -= 1;
+        }
       }
 
-      // Turn into array, sorted by seats desc
-      const parties = Array.from(counts.entries())
-        .map(([name, v]) => ({ name, seats: v.seats, color: v.color }))
-        .sort((a,b)=>b.seats-a.seats);
+      return {
+        rep: finalizeSeries(series.rep),
+        sen: finalizeSeries(series.sen),
+      };
+    }
 
+    function finalizeSeries(seriesMap){
+      const parties = [];
+      for (const [name, entry] of seriesMap.entries()){
+        const counts = new Array(END_MONTH_INDEX).fill(0);
+        let running = 0;
+        for (let i = 0; i < END_MONTH_INDEX; i++){
+          running += entry.diff[i] || 0;
+          counts[i] = running;
+        }
+        parties.push({ name, color: entry.color, counts });
+      }
+      return parties;
+    }
+
+    function getCompositionAt(index, chamberType /* "rep"|"sen" */){
+      const partiesRaw = CHAMBER_SERIES?.[chamberType] || [];
+      const parties = [];
+      let total = 0;
+
+      for (const party of partiesRaw){
+        const seats = party.counts[index] || 0;
+        if (seats <= 0) continue;
+        total += seats;
+        parties.push({ name: party.name, seats, color: party.color });
+      }
+
+      parties.sort((a, b) => b.seats - a.seats);
       return { total, parties };
     }
 
@@ -441,12 +504,10 @@
 
     // ---- Main update ----
     function setSnapshot(index){
-      const d = MONTHS[index];
-      $("snapshotLabel").textContent = formatMonth(d);
-      $("monthIndexLabel").textContent = `#${index}`;
+      updateMonthLabels(index);
 
-      const house = computeChamberComposition(d, "rep");
-      const senate = computeChamberComposition(d, "sen");
+      const house = getCompositionAt(index, "rep");
+      const senate = getCompositionAt(index, "sen");
 
       $("houseTotal").textContent = house.total;
       $("senateTotal").textContent = senate.total;
@@ -488,7 +549,23 @@
       }
 
       slider.disabled = false;
-      slider.addEventListener("input", () => setSnapshot(Number(slider.value)));
+
+      let pendingIndex = Number(slider.value);
+      let rafId = null;
+      const queueSnapshot = (index) => {
+        pendingIndex = index;
+        if (rafId !== null) return;
+        rafId = requestAnimationFrame(() => {
+          rafId = null;
+          if (CHAMBER_SERIES) setSnapshot(pendingIndex);
+        });
+      };
+
+      slider.addEventListener("input", () => {
+        const index = Number(slider.value);
+        updateMonthLabels(index);
+        queueSnapshot(index);
+      });
 
       // start at latest month
       setSnapshot(Number(slider.value));
